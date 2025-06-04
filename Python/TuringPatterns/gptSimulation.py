@@ -94,13 +94,21 @@ def animate(i):
     global U, V
     U, V = updateFN(U, V, Du, Dv, dt)
     im.set_array(U)
+    print(f"Step {i}")
+    if i == 1:
+        plt.savefig("fhn_n1.png", dpi=300)
+    if i == 300:
+        plt.savefig("fhn_n300.png", dpi=300)
+    if i == 999:
+        plt.savefig("fhn_n999.png", dpi=300)
+        sys.exit(0)  # Stop after 1000 steps
     return [im]
 
 anim = animation.FuncAnimation(fig, animate,interval=5, blit=False)
 dvdu = Dv/Du
-plt.title(f"FitzHugh-Nagumo Turing Patterns({dvdu:.2f})")
+# plt.title(f"FitzHugh-Nagumo Turing Patterns({dvdu:.2f})")
 
-plt.axis("off")
+# plt.axis("off")
 
 plt.show()
 

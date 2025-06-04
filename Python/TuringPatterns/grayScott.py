@@ -44,6 +44,12 @@ def update(frame):
     print(f"step={frame}")
 
     im.set_array(u)
+    if frame == 1:
+        plt.savefig("gs_n1.png", dpi=300)
+    if frame == 300:
+        plt.savefig("gs_n300.png", dpi=300)
+    if frame == 999:
+        plt.savefig("gs_n999.png", dpi=300)
     return [im]
 
 # -------------------- Animation --------------------
