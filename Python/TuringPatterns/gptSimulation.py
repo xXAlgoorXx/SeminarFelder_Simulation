@@ -9,13 +9,53 @@ def laplacian(Z):
     return (np.roll(Z, 1, axis=0) + np.roll(Z, -1, axis=0) +
             np.roll(Z, 1, axis=1) + np.roll(Z, -1, axis=1) - 4 * Z)
 
+
+
+# Grid and simulation settings
+nx, ny = 300, 300
+dt = 0.01
+
+# Klein Leopard Turing Patterns
+Du, Dv = 0.1, 23
+lambda_u = 0.9 #U
+sigma = 0.3 #U
+tau = 15 #V
+kappa = 0.004 #V
+
+# #Oszilatorische Turing Patterns
+# Du, Dv = 0.01, 0.1
+# lambda_u = 0.6
+# sigma = 0.1
+# tau = 5
+# kappa = 0.02
+
+# # Hexagonale Turing Patterns — angepasst
+# Du, Dv = 0.0002, 0.005
+# tau = 0.1
+# kappa = -0.05
+# lambda_u = 1.0
+# sigma = 0.3
+# dt = 0.005  # viel kleiner!
+
+
+# # Basepoint
+# Du, Dv = 0.05, 18  # Slower diffusion = larger patterns
+# tau = 20
+# kappa = 0.01
+# lambda_u = 0.9 # Boosted nonlinearity
+# sigma = 0.3
+
+# # Best
+# Du, Dv = 0.0005, 0.008
+# lambda_u = 0.9
+# sigma = 0.2
+# kappa = -0.01
+# tau = 10
+
+
 # FitzHugh-Nagumo update
 def updateFN(U, V, Du, Dv, dt):
-    # Parameters in the Turing regime
-    tau = 20
-    kappa = 0.01
-    lambda_u = 0.8 # Boosted nonlinearity
-    sigma = 0.3
+    
 
     f_u = lambda_u * U - U**3 - kappa
 
@@ -35,17 +75,16 @@ def updateFN(U, V, Du, Dv, dt):
 
     return U, V
 
-# Grid and simulation settings
-nx, ny = 200, 200
-dt = 0.08
-# Du, Dv = 0.00005, 0.005  # Slower diffusion = larger patterns
-Du, Dv = 0.05, 18  # Slower diffusion = larger patterns
-
 # Smoothed random initial conditions
 U = 0.1 * np.random.randn(nx, ny)
 V = 0.1 * np.random.randn(nx, ny)
-U = gaussian_filter(U, sigma=2)
-V = gaussian_filter(V, sigma=2)
+U = gaussian_filter(U, sigma=3)
+V = gaussian_filter(V, sigma=3)
+
+# # Zentrale Störung
+# U = np.zeros((nx, ny))
+# V = np.zeros((nx, ny))
+# U[nx//2-3:nx//2+3, ny//2-3:ny//2+3] = 0.5  # kleine zentrale Störung
 
 # Setup animation
 fig, ax = plt.subplots()
@@ -58,8 +97,9 @@ def animate(i):
     return [im]
 
 anim = animation.FuncAnimation(fig, animate,interval=5, blit=False)
+dvdu = Dv/Du
+plt.title(f"FitzHugh-Nagumo Turing Patterns({dvdu:.2f})")
 
-plt.title("FitzHugh-Nagumo Turing Patterns")
 plt.axis("off")
 
 plt.show()
