@@ -27,14 +27,13 @@ Dv = 0.015      # deutlich schnellerer Inhibitor
 
 dt = 0.01       # Zeitschritt
 
-tau = 0.1
+tau = 0.05
 Du = 0.00028
-Dv = 0.005
-kappa = - 0.05 
-lambda_u = 0.8
+Dv = 0.05
+kappa = - 0.1 
+lambda_u = 1
 stoerkoeff = 0.8
 sigma = 1
-
 # FitzHugh-Nagumo update
 def updateFN(U, V, Du, Dv, dt):
     
@@ -95,6 +94,6 @@ plt.axis("off")
 plt.show()
 
 # Save animation (optional)
-anim.save('fhn_large_patterns.gif',fps = 40)
+# anim.save('fhn_large_patterns.gif',fps = 40)
 
 

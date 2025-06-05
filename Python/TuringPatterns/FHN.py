@@ -14,34 +14,15 @@ def laplacian(Z):
 # Grid and simulation settings
 nx, ny = 200, 200
 
-# # Klein Leopard Turing Patterns
-# Du, Dv = 0.1, 23
-# lambda_u = 0.9 #U
-# sigma = 0.3 #U
-# tau = 15 #V
-# kappa = 0.004 #V
+# Klein Turing Patterns
+Du, Dv = 0.1, 2
+lambda_u = 0.9 #U
+sigma = 0.3 #U
+tau = 15 #V
+kappa = 0.004 #V
 
-Du = 0.0005     # langsamer Aktivator
-Dv = 0.015      # deutlich schnellerer Inhibitor
-
-lambda_u = 0.5
-sigma = 0.3
-
-tau = 30        # langsam reagierender Inhibitor
-kappa = 0.05    # schwache Hintergrundhemmung
-
+stoerkoeff = 0.1
 dt = 0.01       # Zeitschritt
-
-Du = 0.008
-Dv = 0.04
-lambda_u = 0.5
-sigma = 0.3
-tau = 30
-kappa = 0.05
-
-
-stoerkoeff = 0.8
-
 # FitzHugh-Nagumo update
 def updateFN(U, V, Du, Dv, dt):
     
