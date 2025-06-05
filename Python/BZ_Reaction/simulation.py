@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import animation
 matplotlib.use("Qt5Agg") 
+import sys
 
 # Width, height of the image.
 nx, ny = 600, 450
@@ -39,11 +40,23 @@ im = ax.imshow(arr[0,0], cmap=plt.cm.winter)
 ax.axis('off')
 # ===============#
 # 2 Color
+num = 0
 def animate(i, arr):
     """Update the image for iteration i of the Matplotlib animation."""
-
+    global num
     arr = update(i % 2, arr)
     im.set_array(arr[i % 2, 0])
+    print(f"Frame {num}")
+    if num == 1:
+        plt.savefig("bz_n1.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    if num == 50:
+        plt.savefig("bz_n50.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    if num == 300:
+        plt.savefig("bz_n300.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    if num == 999:
+        plt.savefig("fbz_n999.png", dpi=300,bbox_inches='tight', pad_inches=0)
+        sys.exit(0)  # Stop after 1000 steps
+    num += 1
     return [im]
 
 # # #===============#

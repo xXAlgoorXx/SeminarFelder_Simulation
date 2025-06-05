@@ -12,46 +12,35 @@ def laplacian(Z):
 
 
 # Grid and simulation settings
-nx, ny = 300, 300
-dt = 0.01
+nx, ny = 200, 200
 
-# Klein Leopard Turing Patterns
-Du, Dv = 0.1, 23
-lambda_u = 0.9 #U
-sigma = 0.3 #U
-tau = 15 #V
-kappa = 0.004 #V
+# # Klein Leopard Turing Patterns
+# Du, Dv = 0.1, 23
+# lambda_u = 0.9 #U
+# sigma = 0.3 #U
+# tau = 15 #V
+# kappa = 0.004 #V
 
-# #Oszilatorische Turing Patterns
-# Du, Dv = 0.01, 0.1
-# lambda_u = 0.6
-# sigma = 0.1
-# tau = 5
-# kappa = 0.02
+Du = 0.0005     # langsamer Aktivator
+Dv = 0.015      # deutlich schnellerer Inhibitor
 
-# # Hexagonale Turing Patterns — angepasst
-# Du, Dv = 0.0002, 0.005
-# tau = 0.1
-# kappa = -0.05
-# lambda_u = 1.0
-# sigma = 0.3
-# dt = 0.005  # viel kleiner!
+lambda_u = 0.5
+sigma = 0.3
+
+tau = 30        # langsam reagierender Inhibitor
+kappa = 0.05    # schwache Hintergrundhemmung
+
+dt = 0.01       # Zeitschritt
+
+Du = 0.008
+Dv = 0.04
+lambda_u = 0.5
+sigma = 0.3
+tau = 30
+kappa = 0.05
 
 
-# # Basepoint
-# Du, Dv = 0.05, 18  # Slower diffusion = larger patterns
-# tau = 20
-# kappa = 0.01
-# lambda_u = 0.9 # Boosted nonlinearity
-# sigma = 0.3
-
-# # Best
-# Du, Dv = 0.0005, 0.008
-# lambda_u = 0.9
-# sigma = 0.2
-# kappa = -0.01
-# tau = 10
-
+stoerkoeff = 0.8
 
 # FitzHugh-Nagumo update
 def updateFN(U, V, Du, Dv, dt):
@@ -63,7 +52,7 @@ def updateFN(U, V, Du, Dv, dt):
     Lv = laplacian(V)
 
     dU = Du * Lu + f_u - sigma * V
-    dV = (Dv * Lv + U - V) / tau
+    dV = Dv * Lv + (U - V) / tau
 
     U += dU * dt
     V += dV * dt
@@ -76,8 +65,8 @@ def updateFN(U, V, Du, Dv, dt):
     return U, V
 
 # Smoothed random initial conditions
-U = 0.1 * np.random.randn(nx, ny)
-V = 0.1 * np.random.randn(nx, ny)
+U = stoerkoeff * np.random.randn(nx, ny)
+V = stoerkoeff * np.random.randn(nx, ny)
 U = gaussian_filter(U, sigma=3)
 V = gaussian_filter(V, sigma=3)
 
@@ -94,21 +83,21 @@ def animate(i):
     global U, V
     U, V = updateFN(U, V, Du, Dv, dt)
     im.set_array(U)
-    print(f"Step {i}")
-    if i == 1:
-        plt.savefig("fhn_n1.png", dpi=300)
-    if i == 300:
-        plt.savefig("fhn_n300.png", dpi=300)
-    if i == 999:
-        plt.savefig("fhn_n999.png", dpi=300)
-        sys.exit(0)  # Stop after 1000 steps
+    # print(f"Step {i}")
+    # if i == 1:
+    #     plt.savefig("fhn_n1.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    # if i == 300:
+    #     plt.savefig("fhn_n300.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    # if i == 999:
+    #     plt.savefig("fhn_n999.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    #     sys.exit(0)  # Stop after 1000 steps
     return [im]
 
 anim = animation.FuncAnimation(fig, animate,interval=5, blit=False)
 dvdu = Dv/Du
 # plt.title(f"FitzHugh-Nagumo Turing Patterns({dvdu:.2f})")
 
-# plt.axis("off")
+plt.axis("off")
 
 plt.show()
 

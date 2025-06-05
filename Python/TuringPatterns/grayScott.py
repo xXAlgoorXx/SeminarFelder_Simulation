@@ -28,9 +28,10 @@ v += 0.01 * np.random.rand(ny, nx)
 r = 20
 u[ny//2 - r:ny//2 + r, nx//2 - r:nx//2 + r] = 0.50
 v[ny//2 - r:ny//2 + r, nx//2 - r:nx//2 + r] = 0.25
-
+i = 0
 # -------------------- Update-Funktion --------------------
 def update(frame):
+    global i
     global u, v
     Lu = convolve2d(u, laplace_kernel, mode='same', boundary='wrap')
     Lv = convolve2d(v, laplace_kernel, mode='same', boundary='wrap')
@@ -41,21 +42,24 @@ def update(frame):
 
     u[:] = np.clip(u, 0, 1)
     v[:] = np.clip(v, 0, 1)
-    print(f"step={frame}")
+    print(f"step={i:4}")
 
     im.set_array(u)
-    if frame == 1:
-        plt.savefig("gs_n1.png", dpi=300)
-    if frame == 300:
-        plt.savefig("gs_n300.png", dpi=300)
-    if frame == 999:
-        plt.savefig("gs_n999.png", dpi=300)
+    if i == 1:
+        plt.savefig("gs_n1.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    if i == 300:
+        plt.savefig("gs_n300.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    if i == 999:
+        plt.savefig("gs_n999.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    if i == 2000:
+        plt.savefig("gs_ninf.png", dpi=300,bbox_inches='tight', pad_inches=0)
+    i += 1
     return [im]
 
 # -------------------- Animation --------------------
 fig, ax = plt.subplots()
 im = ax.imshow(u, cmap='inferno', interpolation='bicubic')
-ax.set_title("Gray-Scott Turing-Muster")
+# ax.set_title("Gray-Scott Turing-Muster")
 ax.axis('off')
 
 anim = FuncAnimation(fig, update, frames=1000, interval=30, blit=True)
